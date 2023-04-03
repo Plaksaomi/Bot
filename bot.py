@@ -1,5 +1,9 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 
 def start(update, context):
@@ -47,8 +51,6 @@ def button(update, context):
         # Ваше действие при нажатии на кнопку "Купоны"
         pass
     elif query.data == 'favorites':
-    # Ваше действие при нажатии на кнопку "Избранное"
-    pass
         favorites_keyboard = [[InlineKeyboardButton("Добавить товар", callback_data='add_item')],
                               [InlineKeyboardButton("Удалить товар", callback_data='remove_item')],
                               [InlineKeyboardButton("Назад", callback_data='back')]]
@@ -94,7 +96,7 @@ def start(update, context):
     update.message.reply_text('Здравствуйте, чего желаете?', reply_markup=reply_markup)
 
 def main():
-    updater = Updater('6118725048:AAG1g-Jo8d3xtT4pP6jLfycTsJZAXmcdvhc', use_context=True)
+    updater = Updater(os.getenv('TOKEN'), use_context=True)
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(MessageHandler(Filters.text(['Избранное', 'избранное']), show_favorites))
